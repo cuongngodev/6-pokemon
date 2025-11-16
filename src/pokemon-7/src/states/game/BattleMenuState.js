@@ -9,6 +9,7 @@ export default class BattleMenuState extends State {
 	static MENU_OPTIONS = {
 		Fight: "FIGHT",
 		Status: "STATUS",
+		Run: "RUN",
 	}
 
 	/**
@@ -24,6 +25,7 @@ export default class BattleMenuState extends State {
 		const items = [
 			{ text: BattleMenuState.MENU_OPTIONS.Fight, onSelect: () => this.fight() },
 			{ text: BattleMenuState.MENU_OPTIONS.Status, onSelect: () => this.status() },
+			{ text: BattleMenuState.MENU_OPTIONS.Run, onSelect: () => this.run() },
 		];
 
 		this.battleMenu = new Menu(
@@ -47,6 +49,10 @@ export default class BattleMenuState extends State {
 	fight() {
 		stateStack.pop();
 		stateStack.push(new BattleTurnState(this.battleState));
+	}
+	run() {
+		stateStack.pop();
+		this.battleState.exitBattle();
 	}
 
 	status() {
