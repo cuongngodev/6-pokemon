@@ -33,6 +33,7 @@ import {
 	stateStack,
 	timer,
 } from './globals.js';
+import PlayState from './states/game/PlayState.js';
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -62,6 +63,7 @@ pokemonFactory.load(pokemonDefinitions);
 
 // Add all the states to the state machine.
 stateStack.push(new TitleScreenState(mapDefinition));
+stateStack.push(new PlayState(mapDefinition));
 
 const game = new Game(stateStack, context, timer, CANVAS_WIDTH, CANVAS_HEIGHT);
 
