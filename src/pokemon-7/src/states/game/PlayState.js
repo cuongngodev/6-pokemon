@@ -26,18 +26,19 @@ export default class PlayState extends State {
 
 	enter() {
 		sounds.play(SoundName.Route);
-		stateStack.push(
-			new DialogueState(
-				`Welcome to the world of Pokémon! \n\n\
-			Press Enter to advance the text... \n\
-			To start fighting Pokémon with your own \
-			randomly assigned Pokémon, walk in the tall grass. \n\n\
-			If you need to heal, press 'P' in the field! \n\n\
-			Press 'Esc' to view your Pokémon's stats. \n\
-			Good luck!`,
-				Panel.TOP_DIALOGUE
-			)
-		);
+		// Turned off for demo purposes. 
+		// stateStack.push(
+		// 	new DialogueState(
+		// 		`Welcome to the world of Pokémon! \n\n\
+		// 	Press Enter to advance the text... \n\
+		// 	To start fighting Pokémon with your own \
+		// 	randomly assigned Pokémon, walk in the tall grass. \n\n\
+		// 	If you need to heal, press 'P' in the field! \n\n\
+		// 	Press 'Esc' to view your Pokémon's stats. \n\
+		// 	Good luck!`,
+		// 		Panel.TOP_DIALOGUE
+		// 	)
+		// );
 	}
 
 	update(dt) {
