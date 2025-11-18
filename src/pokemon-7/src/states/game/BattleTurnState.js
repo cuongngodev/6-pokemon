@@ -128,6 +128,19 @@ export default class BattleTurnState extends State {
 	}
 
 	checkBattleEnded() {
+		/**
+		 * For testing and implementation purposes, assume opponent always faints.
+		*/
+		let opponentFainted = true;
+		
+		if(opponentFainted){
+			this.processVictory();
+			return true;
+		}
+		
+		return false;
+		/** Bring this back to life later 
+		 * 
 		if (this.playerPokemon.currentHealth <= 0) {
 			this.processDefeat();
 			return true;
@@ -135,8 +148,7 @@ export default class BattleTurnState extends State {
 			this.processVictory();
 			return true;
 		}
-
-		return false;
+		*/
 	}
 
 	/**
@@ -212,14 +224,42 @@ export default class BattleTurnState extends State {
 
 		sounds.play(SoundName.ExperienceFull);
 
+		// save old stats
+		this.saveOldStats();
+
 		this.playerPokemon.levelUp();
 
 		stateStack.push(
 			new BattleMessageState(
 				`${this.playerPokemon.name} grew to LV. ${this.playerPokemon.level}!`,
 				0,
-				() => this.battleState.exitBattle()
+				() => {
+					stateStack.push(new BattleMessageState(
+						this.getStatsChange(),
+						0,
+						() => this.battleState.exitBattle()
+					));
+				}
 			)
-		);
+		)
+	}
+
+	/**
+	 * Save old stats, call when player wins
+	 */
+	saveOldStats(){
+		this.oldAttack = this.playerPokemon.attack;
+		this.oldDefense = this.playerPokemon.defense;
+		this.oldSpeed = this.playerPokemon.speed;
+	}
+
+	/**
+	 * Get the changes in stats after leveling up. (attack, defense, speed)
+	 */
+	getStatsChange(){
+		return `Attack: ${this.oldAttack} > ${this.playerPokemon.attack}
+			Defense: ${this.oldDefense} > ${this.playerPokemon.defense}
+			Speed: ${this.oldSpeed} > ${this.playerPokemon.speed}
+		`;
 	}
 }
