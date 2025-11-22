@@ -24,8 +24,8 @@ export default class BattlePlayerPanel extends Panel {
 		this.pokemon = pokemon;
 		
 		// Create health progress bar
-		const healthBarX = x + 0.4;
-		const healthBarY = y + height - 0.6; // Higher up to make room for experience bar
+		const healthBarX = x + 0.5;
+		const healthBarY = y + height/2; // Higher up to make room for experience bar
 		const barWidth = width - 0.8;
 		const barHeight = 0.2;
 		
@@ -38,9 +38,9 @@ export default class BattlePlayerPanel extends Panel {
 			ProgressBar.TYPE.HEALTH
 		);
 
-		 // Create experience progress bar below health bar
-        const expBarX = x + 0.4;
-        const expBarY = y + height - 0.35; // Below health bar
+		 // Create experience progress bar
+        const expBarX = x + 0.5;
+        const expBarY = y + height/2 + 1; // Below health bar
         
         this.experienceProgressBar = new ProgressBar(
             expBarX,
@@ -84,13 +84,13 @@ export default class BattlePlayerPanel extends Panel {
 		);
 		context.fillText(
 			`HP: ${this.pokemon.getHealthMeter()}`,
-			this.position.x + this.dimensions.x - 128,
-			this.position.y + this.dimensions.y - 73 // Moved up to make room for both bars
+			this.position.x + this.dimensions.x - 122,
+			this.position.y + this.dimensions.y - 67 // Moved up to make room for both bars
 		);
 		context.fillText(
 			`EXP: ${this.pokemon.getExperienceMeter()}`,
-			this.position.x + this.dimensions.x - 137,
-			this.position.y + this.dimensions.y - 58 // Moved up to make room for both bars
+			this.position.x + this.dimensions.x - 130,
+			this.position.y + this.dimensions.y - 35 // Moved up to make room for both bars
 		);
 		context.restore();
 	}
