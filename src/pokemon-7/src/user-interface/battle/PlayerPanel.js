@@ -38,6 +38,19 @@ export default class BattlePlayerPanel extends Panel {
 			ProgressBar.TYPE.HEALTH
 		);
 
+		 // Create experience progress bar below health bar
+        const expBarX = x + 0.4;
+        const expBarY = y + height - 0.35; // Below health bar
+        
+        this.experienceProgressBar = new ProgressBar(
+            expBarX,
+            expBarY,
+            barWidth,
+            barHeight,
+            this.pokemon,
+            ProgressBar.TYPE.EXPERIENCE
+        );
+
 	}
 
 	render() {
@@ -45,6 +58,8 @@ export default class BattlePlayerPanel extends Panel {
 
 		this.renderStatistics();
 		this.healthProgressBar.render();
+	 	this.experienceProgressBar.render();
+
 	}
 
 	/**
