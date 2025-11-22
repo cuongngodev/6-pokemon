@@ -3,6 +3,7 @@ import { context } from "../../globals.js";
 import Pokemon from "../../entities/Pokemon.js";
 import UserInterfaceElement from "../UserInterfaceElement.js";
 import Panel from "../elements/Panel.js";
+import ProgressBar from "../elements/ProgressBar.js";
 
 export default class BattlePlayerPanel extends Panel {
 	/**
@@ -21,12 +22,29 @@ export default class BattlePlayerPanel extends Panel {
 		super(x, y, width, height, options);
 
 		this.pokemon = pokemon;
+		
+		// Create health progress bar
+		const healthBarX = x + 0.4;
+		const healthBarY = y + height - 0.6; // Higher up to make room for experience bar
+		const barWidth = width - 0.8;
+		const barHeight = 0.2;
+		
+		this.healthProgressBar = new ProgressBar(
+			healthBarX,
+			healthBarY,
+			barWidth,
+			barHeight,
+			this.pokemon,
+			ProgressBar.TYPE.HEALTH
+		);
+
 	}
 
 	render() {
 		super.render();
 
 		this.renderStatistics();
+		this.healthProgressBar.render();
 	}
 
 	/**
@@ -37,7 +55,7 @@ export default class BattlePlayerPanel extends Panel {
 		context.save();
 		context.textBaseline = 'top';
 		context.fillStyle = Colour.Black;
-		context.font = `${UserInterfaceElement.FONT_SIZE}px ${UserInterfaceElement.FONT_FAMILY}`;
+		context.font = `${UserInterfaceElement.FONT_SIZE-5}px ${UserInterfaceElement.FONT_FAMILY}`;
 		context.fillText(
 			this.pokemon.name.toUpperCase(),
 			this.position.x + 15,
@@ -51,13 +69,13 @@ export default class BattlePlayerPanel extends Panel {
 		);
 		context.fillText(
 			`HP: ${this.pokemon.getHealthMeter()}`,
-			this.position.x + this.dimensions.x - 30,
-			this.position.y + this.dimensions.y - 50
+			this.position.x + this.dimensions.x - 128,
+			this.position.y + this.dimensions.y - 73 // Moved up to make room for both bars
 		);
 		context.fillText(
 			`EXP: ${this.pokemon.getExperienceMeter()}`,
-			this.position.x + this.dimensions.x - 30,
-			this.position.y + this.dimensions.y - 25
+			this.position.x + this.dimensions.x - 137,
+			this.position.y + this.dimensions.y - 58 // Moved up to make room for both bars
 		);
 		context.restore();
 	}
