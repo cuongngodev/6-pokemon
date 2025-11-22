@@ -5,6 +5,7 @@ import Sounds from '../lib/Sounds.js';
 import StateStack from '../lib/StateStack.js';
 import Timer from '../lib/Timer.js';
 import PokemonFactory from './services/PokemonFactory.js';
+import MoveFactory from './services/MoveFactory.js';
 
 export const canvas = document.createElement('canvas');
 export const context =
@@ -34,5 +35,6 @@ export const timer = new Timer();
 export const sounds = new Sounds();
 
 export const pokemonFactory = new PokemonFactory();
+export const moveFactory = new MoveFactory();
 
 export const DEBUG = false;
