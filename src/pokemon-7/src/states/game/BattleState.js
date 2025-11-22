@@ -44,10 +44,10 @@ export default class BattleState extends State {
 			Panel.BOTTOM_DIALOGUE.height,
 		);
 		this.playerPanel = new BattlePlayerPanel(
-			Panel.BATTLE_PLAYER.x,
+			Panel.BATTLE_PLAYER.x-0.5,
 			Panel.BATTLE_PLAYER.y,
 			Panel.BATTLE_PLAYER.width,
-			Panel.BATTLE_PLAYER.height,
+			Panel.BATTLE_PLAYER.height+ 0.2, // Slightly taller to fit both bars
 			this.playerPokemon,
 		);
 		this.opponentPanel = new BattleOpponentPanel(
