@@ -24,7 +24,7 @@ export default class BattleOpponentPanel extends Panel {
 		
 		// Create progress bar using tile coordinates (this will be converted to pixels)
 		const progressBarX = x + 0.4; // Small offset in tile units
-		const progressBarY = y + height - 0.4; // Near bottom of panel
+		const progressBarY = y + height/2; 
 		const progressBarWidth = width - 0.8; // Leave small margins
 		const progressBarHeight = 0.25; // Thin bar in tile units
 		
@@ -35,6 +35,8 @@ export default class BattleOpponentPanel extends Panel {
 			progressBarHeight,
 			this.pokemon
 		);
+
+		
 	}
 
 	render() {
@@ -55,12 +57,12 @@ export default class BattleOpponentPanel extends Panel {
 		context.font = `${UserInterfaceElement.FONT_SIZE-3}px ${UserInterfaceElement.FONT_FAMILY}`; // Slightly smaller font
 		context.fillText(this.pokemon.name.toUpperCase(), this.position.x + 15, this.position.y + 12);
 		context.textAlign = 'right';
-		context.fillText(
-			`HP: ${this.pokemon.getHealthMeter()}`,
-			// modify the x position to accommodate progress bar
-			this.position.x + this.dimensions.x - 105,
-			this.position.y + this.dimensions.y - 35
-		);
+		// context.fillText(
+		// 	`HP: ${this.pokemon.getHealthMeter()}`,
+		// 	// modify the x position to accommodate progress bar
+		// 	this.position.x + this.dimensions.x - 105,
+		// 	this.position.y + this.dimensions.y - 35
+		// );
 		context.fillText(`Lv${this.pokemon.level}`, this.position.x + this.dimensions.x - 10, this.position.y + 12);
 		context.restore();
 	}
