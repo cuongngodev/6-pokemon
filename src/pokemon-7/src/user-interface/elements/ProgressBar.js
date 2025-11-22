@@ -34,8 +34,8 @@ export default class ProgressBar extends Panel {
 			this.updateTargetColor();
 		} else {
 			// Experience bar properties
-			this.currentDisplayExperience = pokemon.currentExperience;
-			this.targetExperience = pokemon.experienceFromLevel(pokemon.level + 1);
+			this.currentDisplayExperience = pokemon.currentExperience - pokemon.levelExperience;
+			this.targetDisplayerExperience = pokemon.targetExperience - pokemon.levelExperience;
 			this.currentColor = { r: 0, g: 0, b: 1 }; // Start with blue
 			this.targetColor = { r: 0, g: 0, b: 1 };
 		}
@@ -123,28 +123,29 @@ export default class ProgressBar extends Panel {
 	 */
 	updateExperience() {
 		// Check if experience has changed
-		if (this.targetExperience !== this.pokemon.currentExperience) {
-			this.targetExperience = this.pokemon.currentExperience;
-			
-			// Start experience bar width tween
+		if (this.currentDisplayExperience !== this.pokemon.currentExperience) {
+			sounds.play(SoundName.ExperienceGain);
+
+			// TWEEN 1: Experience bar width animation (0.6 seconds)
+
 			timer.tween(
 				this,
 				['currentDisplayExperience'],
-				[this.targetExperience],
-				0.8 // Slower     
+				[this.pokemon.currentExperience],
+				0.6 // Slower,
 			);
 			
 			// Experience bars can have color effects for level ups
-			if (this.pokemon.currentExperience >= this.pokemon.targetExperience) {
-				// Flash gold when experience is full (level up!)
-				this.currentColor = { r: 1, g: 0.84, b: 0 }; // Gold flash
+				this.currentColor = { r: 1, g: 0.84, b: 0 }; // Blue flash
 				timer.tween(
 					this.currentColor,
 					['r', 'g', 'b'],
 					[0, 0, 1], // Back to blue
-					0.5
+					0.6,
+                   
 				);
-			}
+			// }
+            // this.currentDisplayExperience = this.pokemon.currentExperience;
 		}
 	}
 
@@ -163,16 +164,15 @@ export default class ProgressBar extends Panel {
 				this,
 				['currentDisplayHealth'], // current bar width
 				[this.targetHealth], // target bar width
-				0.5 // Animation duration in seconds
-			);
-			
-			// Start color tween
-			timer.tween(
-				this.currentColor,
-				['r', 'g', 'b'],
-				[this.targetColor.r, this.targetColor.g, this.targetColor.b],
-				0.3 // Slightly faster color transition
-			);
+				0.8, // Animation duration in seconds
+                // Start color tween
+                timer.tween(
+                    this.currentColor,
+                    ['r', 'g', 'b'],
+                    [this.targetColor.r, this.targetColor.g, this.targetColor.b],
+                    0.5, // Slightly faster color transition
+                )
+			);           
 		}
 	}
 
