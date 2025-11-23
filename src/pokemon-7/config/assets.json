@@ -171,6 +171,12 @@
       "volume": 0.2
     },
     {
+      "name": "hit-regular",
+      "path": "./assets/sounds/effects/battle-damage.ogg",
+      "size": 2,
+      "volume": 0.2
+    },
+    {
       "name": "hit-not-effective",
       "path": "./assets/sounds/effects/hit-not-effective.wav",
       "size": 2,
