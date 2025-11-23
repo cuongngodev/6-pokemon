@@ -15,7 +15,7 @@ export default class TypeEffectiveness {
     static MESSAGE = {
         SUPER_EFFECTIVE: "It's super effective!",
         NOT_VERY_EFFECTIVE: "It's not very effective...",
-        NORMAL: null // No message 
+        NORMAL: "Not anything special, you can do better!" 
     };
 
     /**
@@ -83,13 +83,49 @@ export default class TypeEffectiveness {
      * Get complete effectiveness information for a move vs Pokemon matchup
      * @param {string} moveType - The type of the move being used
      * @param {string} pokemonType - The type of the defending Pokemon
-     * @returns {object} - Object containing multiplier
+     * @returns {object} - Object containing multiplier, message, and sound
      */
     static getEffectivenessInfo(moveType, pokemonType) {
         const multiplier = TypeEffectiveness.getMultiplier(moveType, pokemonType);
+        const message = TypeEffectiveness.getMessage(multiplier);
+        const sound = TypeEffectiveness.getSound(multiplier);
 
         return {
             multiplier,
+            message,
+            sound
         };
+    }
+
+    /**
+     * Get the effectiveness message for a given multiplier
+     * @param {number} multiplier - The damage multiplier
+     * @returns {string|null} - Message to display, or null for normal effectiveness
+     */
+    static getMessage(multiplier) {
+        switch (multiplier) {
+            case TypeEffectiveness.EFFECTIVENESS.SUPER_EFFECTIVE:
+                return TypeEffectiveness.MESSAGE.SUPER_EFFECTIVE;
+            case TypeEffectiveness.EFFECTIVENESS.NOT_VERY_EFFECTIVE:
+                return TypeEffectiveness.MESSAGE.NOT_VERY_EFFECTIVE;
+            default:
+                return TypeEffectiveness.MESSAGE.NORMAL;
+        }
+    }
+
+    /**
+     * Get the appropriate sound name for a given multiplier
+     * @param {number} multiplier - The damage multiplier
+     * @returns {string} - Sound name to play
+     */
+    static getSound(multiplier) {
+        switch (multiplier) {
+            case TypeEffectiveness.EFFECTIVENESS.SUPER_EFFECTIVE:
+                return 'HitSuperEffective'; // hit-super-effective.wav
+            case TypeEffectiveness.EFFECTIVENESS.NOT_VERY_EFFECTIVE:
+                return 'HitNotEffective'; // hit-not-effective.wav
+            default:
+                return 'HitRegular'; // hit-regular.wav
+        }
     }
 }
