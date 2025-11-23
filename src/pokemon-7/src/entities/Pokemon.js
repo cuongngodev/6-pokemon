@@ -262,6 +262,8 @@ export default class Pokemon extends GameEntity {
 					damage: damage,
 					effectiveness: {
 						multiplier: 1.0,
+						message: null,
+						sound: 'HitRegular'
 				
 					}
 				};
