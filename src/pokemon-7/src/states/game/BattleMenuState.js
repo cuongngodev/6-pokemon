@@ -2,8 +2,8 @@ import State from "../../../lib/State.js";
 import { stateStack } from "../../globals.js";
 import Menu from "../../user-interface/elements/Menu.js";
 import BattleMessageState from "./BattleMessageState.js";
+import BattleMoveMenuState from "./BattleMoveMenuState.js";
 import BattleState from "./BattleState.js";
-import BattleTurnState from "./BattleTurnState.js";
 
 export default class BattleMenuState extends State {
 	static MENU_OPTIONS = {
@@ -48,7 +48,7 @@ export default class BattleMenuState extends State {
 
 	fight() {
 		stateStack.pop();
-		stateStack.push(new BattleTurnState(this.battleState));
+		stateStack.push(new BattleMoveMenuState(this.battleState));
 	}
 	run() {
 		stateStack.pop();

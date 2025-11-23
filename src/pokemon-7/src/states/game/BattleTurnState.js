@@ -53,6 +53,10 @@ export default class BattleTurnState extends State {
 					return;
 				}
 
+				// Clear the selected move after the turn is complete
+				this.battleState.selectedMove = null;
+				this.battleState.selectedMoveIndex = null;
+
 				stateStack.pop();
 				stateStack.push(new BattleMenuState(this.battleState));
 			});
@@ -72,9 +76,17 @@ export default class BattleTurnState extends State {
 	 * @param {function} callback
 	 */
 	attack(attacker, defender, callback) {
+		// Create a descriptive message based on who's attacking and what move is used
+		let attackMessage;
+		if (attacker === this.playerPokemon && this.battleState.selectedMove) {
+			attackMessage = `${attacker.name} used ${this.battleState.selectedMove.name}!`;
+		} else {
+			attackMessage = `${attacker.name} attacked ${defender.name}!`;
+		}
+
 		stateStack.push(
 			new BattleMessageState(
-				`${attacker.name} attacked ${defender.name}!`,
+				attackMessage,
 				0.5,
 				() => {
 					timer.tween(
@@ -121,7 +133,13 @@ export default class BattleTurnState extends State {
 		timer.addTask(action, interval, duration, () => {
 			defender.alpha = 1;
 
-			attacker.inflictDamage(defender);
+			// Use the selected move if the attacker is the player Pokemon
+			if (attacker === this.playerPokemon && this.battleState.selectedMove) {
+				attacker.inflictDamage(defender, this.battleState.selectedMove);
+			} else {
+				// For opponent Pokemon or if no move selected, use default behavior
+				attacker.inflictDamage(defender);
+			}
 
 			callback();
 		});
