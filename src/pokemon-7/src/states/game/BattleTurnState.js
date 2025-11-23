@@ -20,9 +20,11 @@ export default class BattleTurnState extends State {
 	constructor(battleState) {
 		super();
 
-		this.battleState = battleState;
+		this.battleState = battleState; // Reference to the main BattleState also the selected move 
 		this.playerPokemon = battleState.playerPokemon;
 		this.opponentPokemon = battleState.opponentPokemon;
+
+		this.playerEffectivenessResult = null;
 
 		// Determine the order of attack based on the Pokemons' speed.
 		if (this.playerPokemon.speed > this.opponentPokemon.speed) {
@@ -107,7 +109,23 @@ export default class BattleTurnState extends State {
 									this.inflictDamage(
 										attacker,
 										defender,
-										callback
+										() => {
+                                        // Show effectiveness message if there is one
+                                        if (this.battleState.playerEffectivenessResult && this.battleState.playerEffectivenessResult.effectiveness.message) {
+											// effectiveness message
+											let message = this.battleState.playerEffectivenessResult.effectiveness.message;
+											console.log("Show Effectiveness message:", message);
+                                            stateStack.push(
+                                                new BattleMessageState(
+                                                    message,
+                                                    1.5,
+                                                    callback
+                                                )
+                                            );
+                                        } else {
+                                            callback();
+                                        }
+                                    }
 									)
 							);
 						}
@@ -135,10 +153,12 @@ export default class BattleTurnState extends State {
 
 			// Use the selected move if the attacker is the player Pokemon
 			if (attacker === this.playerPokemon && this.battleState.selectedMove) {
-				attacker.inflictDamage(defender, this.battleState.selectedMove);
+				// Get the effectiveness result for the player's move 
+				this.battleState.playerEffectivenessResult = attacker.inflictDamageWithEffectiveness(defender, this.battleState.selectedMove);
+				console.log("Effectiveness Result:", this.battleState.playerEffectivenessResult);
 			} else {
 				// For opponent Pokemon or if no move selected, use default behavior
-				attacker.inflictDamage(defender);
+				attacker.inflictDamageWithEffectiveness(defender);
 			}
 
 			callback();
