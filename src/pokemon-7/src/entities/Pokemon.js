@@ -270,9 +270,9 @@ export default class Pokemon extends GameEntity {
 			}
 		}
 
-    // Use the move with type effectiveness
-    return move.useWithEffectiveness(this, defender);
-}
+		// Use the move with type effectiveness
+		return move.useWithEffectiveness(this, defender);
+		}
 
 	getHealthMeter() {
 		return `${Math.floor(this.currentHealth)} / ${this.health}`;
