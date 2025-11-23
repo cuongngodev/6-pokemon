@@ -57,16 +57,39 @@ export default class TypeEffectiveness {
     * @returns {number} - Damage multiplier (0.5, 1.0, or 2.0)
     */
     static getMultiplier(moveType, pokemonType) {
+        if (!moveType) {
+            console.warn(`Move type is undefined or null`);
+            return TypeEffectiveness.EFFECTIVENESS.NORMAL;
+        }
+
+        if (!pokemonType) {
+            console.warn(`Pokemon type is undefined or null`);
+            return TypeEffectiveness.EFFECTIVENESS.NORMAL;
+        }
+
         if (!TypeEffectiveness.typeChart[moveType]) {
-            console.log(`Unknown move type: ${moveType}`);
+            console.warn(`Unknown move type: ${moveType}`);
             return TypeEffectiveness.EFFECTIVENESS.NORMAL;
         }
 
         if (!TypeEffectiveness.typeChart[moveType][pokemonType]) {
-            console.log(`Unknown Pokemon type: ${pokemonType} for move type: ${moveType}`);
+            console.warn(`Unknown Pokemon type: ${pokemonType} for move type: ${moveType}`);
             return TypeEffectiveness.EFFECTIVENESS.NORMAL;
         }
 
         return TypeEffectiveness.typeChart[moveType][pokemonType];
    }
+   /**
+     * Get complete effectiveness information for a move vs Pokemon matchup
+     * @param {string} moveType - The type of the move being used
+     * @param {string} pokemonType - The type of the defending Pokemon
+     * @returns {object} - Object containing multiplier
+     */
+    static getEffectivenessInfo(moveType, pokemonType) {
+        const multiplier = TypeEffectiveness.getMultiplier(moveType, pokemonType);
+
+        return {
+            multiplier,
+        };
+    }
 }
