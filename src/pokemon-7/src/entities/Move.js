@@ -70,7 +70,8 @@ export default class Move {
         return {
             damage: finalDamage,
             baseDamage: baseDamage,
-            effectiveness: effectivenessInfo
+            effectiveness: effectivenessInfo,
+			sound: TypeEffectiveness.getSound(effectivenessInfo.multiplier)
         };
     }	/**
 	 * Calculate the actual damage this move will deal.
