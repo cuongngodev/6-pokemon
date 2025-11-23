@@ -78,6 +78,9 @@ export default class BattleTurnState extends State {
 	 * @param {function} callback
 	 */
 	attack(attacker, defender, callback) {
+		this.battleState.playerEffectivenessResult = attacker.inflictDamageWithEffectiveness(defender, this.battleState.selectedMove);
+		
+		let playerEffectivenessResult = this.battleState.playerEffectivenessResult;
 		// Create a descriptive message based on who's attacking and what move is used
 		let attackMessage;
 		if (attacker === this.playerPokemon && this.battleState.selectedMove) {
@@ -111,10 +114,20 @@ export default class BattleTurnState extends State {
 										defender,
 										() => {
                                         // Show effectiveness message if there is one
-                                        if (this.battleState.playerEffectivenessResult && this.battleState.playerEffectivenessResult.effectiveness.message) {
+                                        if (playerEffectivenessResult && playerEffectivenessResult.effectiveness.message) {
 											// effectiveness message
-											let message = this.battleState.playerEffectivenessResult.effectiveness.message;
-											console.log("Show Effectiveness message:", message);
+											let message = playerEffectivenessResult.effectiveness.message;
+											let soundName = playerEffectivenessResult.effectiveness.sound;
+											
+											
+											// Only play sound if it exists
+											if (soundName && typeof soundName === 'string') {
+												try {
+													sounds.play(soundName);
+												} catch (error) {
+													console.error("Error playing sound:", error, "Sound name:", soundName);
+												}
+											}
                                             stateStack.push(
                                                 new BattleMessageState(
                                                     message,
@@ -155,6 +168,8 @@ export default class BattleTurnState extends State {
 			if (attacker === this.playerPokemon && this.battleState.selectedMove) {
 				// Get the effectiveness result for the player's move 
 				this.battleState.playerEffectivenessResult = attacker.inflictDamageWithEffectiveness(defender, this.battleState.selectedMove);
+				
+
 				console.log("Effectiveness Result:", this.battleState.playerEffectivenessResult);
 			} else {
 				// For opponent Pokemon or if no move selected, use default behavior
@@ -169,23 +184,23 @@ export default class BattleTurnState extends State {
 		/**
 		 * For testing and implementation purposes, assume opponent always faints.
 		*/
-		// let opponentFainted = true;
+		let opponentFainted = true;
 		
-		// if(opponentFainted){
-		// 	this.processVictory();
-		// 	return true;
-		// }
+		if(opponentFainted){
+			this.processVictory();
+			return true;
+		}
 		
 		// return false;
 		/** Bring this back to life later 
 		 * */
-		if (this.playerPokemon.currentHealth <= 0) {
-			this.processDefeat();
-			return true;
-		} else if (this.opponentPokemon.currentHealth <= 0) {
-			this.processVictory();
-			return true;
-		}
+		// if (this.playerPokemon.currentHealth <= 0) {
+		// 	this.processDefeat();
+		// 	return true;
+		// } else if (this.opponentPokemon.currentHealth <= 0) {
+		// 	this.processVictory();
+		// 	return true;
+		// }
 		
 	}
 
