@@ -123,9 +123,9 @@ export default class PlayerWalkingState extends State {
 				this.isMoving = false;
 
 				this.updateDirection();
-				// if (this.checkForEncounter(x, y)) {
+				if (this.checkForEncounter(x, y)) {
 					this.startEncounter();
-				// }
+				}
 			}
 		);
 	}
