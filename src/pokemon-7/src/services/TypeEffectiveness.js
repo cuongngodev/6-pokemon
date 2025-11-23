@@ -1,3 +1,5 @@
+import SoundName from "../enums/SoundName";
+
 export default class TypeEffectiveness {
     static TYPE = {
         FIRE: 'Fire',
@@ -5,13 +7,17 @@ export default class TypeEffectiveness {
         GRASS: 'Grass',
         NORMAL: 'Normal'
     };
-
+    /**
+     * Effectiveness multipliers
+     */
     static EFFECTIVENESS = {
         SUPER_EFFECTIVE: 2.0,
         NORMAL: 1.0,
         NOT_VERY_EFFECTIVE: 0.5
     };
-
+    /**
+     * Effectiveness messages
+     */
     static MESSAGE = {
         SUPER_EFFECTIVE: "It's super effective!",
         NOT_VERY_EFFECTIVE: "It's not very effective...",
@@ -121,11 +127,11 @@ export default class TypeEffectiveness {
     static getSound(multiplier) {
         switch (multiplier) {
             case TypeEffectiveness.EFFECTIVENESS.SUPER_EFFECTIVE:
-                return 'HitSuperEffective'; // hit-super-effective.wav
+                return SoundName.HitSuperEffective; // hit-super-effective.wav
             case TypeEffectiveness.EFFECTIVENESS.NOT_VERY_EFFECTIVE:
-                return 'HitNotEffective'; // hit-not-effective.wav
+                return SoundName.HitNotEffective; // hit-not-effective.wav
             default:
-                return 'HitRegular'; // hit-regular.wav
+                return SoundName.HitRegular; // hit-regular.wav
         }
     }
 }

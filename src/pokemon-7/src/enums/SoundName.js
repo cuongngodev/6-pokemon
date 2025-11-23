@@ -18,6 +18,9 @@ const SoundName = {
 	PokemonFaint: "pokemon-faint",
 	SelectionChoice: "selection-choice",
 	SelectionMove: "selection-move",
+	HitSuperEffective: "hit-super-effective",
+	HitRegular: "hit-regular",
+	HitNotEffective: "hit-not-effective",
 
 	// Pokemon
 	Charmander: "charmander",
