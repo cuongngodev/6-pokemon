@@ -1,4 +1,4 @@
-import SoundName from "../enums/SoundName";
+import SoundName from "../enums/SoundName.js";
 
 export default class TypeEffectiveness {
     static TYPE = {
