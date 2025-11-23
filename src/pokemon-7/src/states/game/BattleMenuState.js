@@ -48,6 +48,7 @@ export default class BattleMenuState extends State {
 
 	fight() {
 		stateStack.pop();
+		// Push the move menu state onto the stack to allow the Player to select a move.
 		stateStack.push(new BattleMoveMenuState(this.battleState));
 	}
 	run() {
