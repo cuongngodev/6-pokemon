@@ -2,7 +2,7 @@ import GameEntity from './GameEntity.js';
 import { getRandomPositiveInteger } from '../../lib/Random.js';
 import Sprite from '../../lib/Sprite.js';
 import Vector from '../../lib/Vector.js';
-import { context, images } from '../globals.js';
+import { context, images, moveFactory } from '../globals.js';
 
 export default class Pokemon extends GameEntity {
 	static FRONT_POSITION = {
@@ -78,6 +78,18 @@ export default class Pokemon extends GameEntity {
 		this.baseSpeed = definition.baseSpeed;
 		this.baseExperience = definition.baseExperience;
 
+		// Load moves from the definition
+		this.moves = [];
+		if (definition.starterMoves) {
+			definition.starterMoves.forEach(moveName => {
+				try {
+					this.moves.push(moveFactory.createInstance(moveName));
+				} catch (error) {
+					console.warn(`Could not load move "${moveName}" for ${name}:`, error);
+				}
+			});
+		}
+		console.log(`Loaded moves for ${name}:`, this.moves);
 		this.initializeIndividualValues();
 
 		this.health = 0;
@@ -93,7 +105,7 @@ export default class Pokemon extends GameEntity {
 
 		this.currentHealth = this.health;
 
-		// Used to flash the Pokemon when taking damage.
+		// Used to flash the Pokemon when taking damage, further improvement
 		this.alpha = 1;
 	}
 
@@ -191,22 +203,34 @@ export default class Pokemon extends GameEntity {
 
 	/**
 	 * @param {Pokemon} defender
+	 * @param {Move} move - The move to use for the attack
 	 * @see https://bulbapedia.bulbagarden.net/wiki/Damage
 	 */
-	inflictDamage(defender) {
-		const power = 40;
-		const damage = Math.max(
-			1,
-			Math.floor(
-				(((2 * this.level) / 5 + 2) *
-					power *
-					(this.attack / defender.defense)) /
-					50 +
-					2
-			)
-		);
+	inflictDamage(defender, move = null) {
+		// If no move specified, use the first available move, or fall back to a basic attack
+		if (!move) {
+			if (this.moves.length > 0) {
+				move = this.moves[0];
+			} else {
+				// Fallback to basic attack if no moves available
+				const power = 40;
+				const damage = Math.max(
+					1,
+					Math.floor(
+						(((2 * this.level) / 5 + 2) *
+							power *
+							(this.attack / defender.defense)) /
+							50 +
+							2
+					)
+				);
+				defender.currentHealth = Math.max(0, defender.currentHealth - damage);
+				return damage;
+			}
+		}
 
-		defender.currentHealth = Math.max(0, defender.currentHealth - damage);
+		// Use the move to deal damage
+		return move.use(this, defender);
 	}
 
 	getHealthMeter() {

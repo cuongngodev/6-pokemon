@@ -28,11 +28,13 @@ import {
 	context,
 	fonts,
 	images,
+	moveFactory,
 	pokemonFactory,
 	sounds,
 	stateStack,
 	timer,
 } from './globals.js';
+import PlayState from './states/game/PlayState.js';
 
 // Set the dimensions of the play area.
 canvas.width = CANVAS_WIDTH;
@@ -53,15 +55,20 @@ const mapDefinition = await fetch('./config/map.json').then((response) =>
 const pokemonDefinitions = await fetch('./config/pokemon.json').then(
 	(response) => response.json()
 );
+const moveDefinitions = await fetch('./config/moves.json').then(
+	(response) => response.json()
+);
 
 // Load all the assets from their definitions.
 images.load(imageDefinitions);
 fonts.load(fontDefinitions);
 sounds.load(soundDefinitions);
 pokemonFactory.load(pokemonDefinitions);
+moveFactory.load(moveDefinitions);
 
 // Add all the states to the state machine.
 stateStack.push(new TitleScreenState(mapDefinition));
+stateStack.push(new PlayState(mapDefinition));
 
 const game = new Game(stateStack, context, timer, CANVAS_WIDTH, CANVAS_HEIGHT);
 

@@ -3,6 +3,7 @@ import Colour from "../../enums/Colour.js";
 import { context } from "../../globals.js";
 import Pokemon from "../../entities/Pokemon.js";
 import UserInterfaceElement from "../UserInterfaceElement.js";
+import ProgressBar from "../elements/ProgressBar.js";
 
 export default class BattleOpponentPanel extends Panel {
 	/**
@@ -20,12 +21,29 @@ export default class BattleOpponentPanel extends Panel {
 		super(x, y, width, height, options);
 
 		this.pokemon = pokemon;
+		
+		// Create progress bar using tile coordinates (this will be converted to pixels)
+		const progressBarX = x + 0.4; // Small offset in tile units
+		const progressBarY = y + height/2; 
+		const progressBarWidth = width - 0.8; // Leave small margins
+		const progressBarHeight = 0.25; // Thin bar in tile units
+		
+		this.healthProgressBar = new ProgressBar(
+			progressBarX,
+			progressBarY,
+			progressBarWidth,
+			progressBarHeight,
+			this.pokemon
+		);
+
+		
 	}
 
 	render() {
 		super.render();
 
 		this.renderStatistics();
+		this.healthProgressBar.renderHealthProportion();
 	}
 
 	/**
@@ -36,14 +54,15 @@ export default class BattleOpponentPanel extends Panel {
 		context.save();
 		context.textBaseline = 'top';
 		context.fillStyle = Colour.Black;
-		context.font = `${UserInterfaceElement.FONT_SIZE}px ${UserInterfaceElement.FONT_FAMILY}`;
+		context.font = `${UserInterfaceElement.FONT_SIZE-3}px ${UserInterfaceElement.FONT_FAMILY}`; // Slightly smaller font
 		context.fillText(this.pokemon.name.toUpperCase(), this.position.x + 15, this.position.y + 12);
 		context.textAlign = 'right';
-		context.fillText(
-			`HP: ${this.pokemon.getHealthMeter()}`,
-			this.position.x + this.dimensions.x - 30,
-			this.position.y + this.dimensions.y - 25
-		);
+		// context.fillText(
+		// 	`HP: ${this.pokemon.getHealthMeter()}`,
+		// 	// modify the x position to accommodate progress bar
+		// 	this.position.x + this.dimensions.x - 105,
+		// 	this.position.y + this.dimensions.y - 35
+		// );
 		context.fillText(`Lv${this.pokemon.level}`, this.position.x + this.dimensions.x - 10, this.position.y + 12);
 		context.restore();
 	}

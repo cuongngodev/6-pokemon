@@ -6,6 +6,9 @@ const Colour = {
 	Gold: 'gold',
 	Grey: 'rgb(100, 110, 150)',
 	White: 'white',
+	Green: '#00ff00',
+	Red: '#ff0000',
+	Yellow: '#ffff00',
 };
 
 export default Colour;
