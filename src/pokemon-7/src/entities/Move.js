@@ -36,9 +36,9 @@ export default class Move {
      */
     calculateDamageWithEffectiveness(attacker, defender) {
         // Debug logging
-        console.log(`Move: ${this.name} (${this.type}) vs Defender: ${defender.name} (${defender.type})`);
-        console.log(`Attacker stats: level=${attacker.level}, attack=${attacker.attack}`);
-        console.log(`Defender stats: defense=${defender.defense}`);
+        // console.log(`Move: ${this.name} (${this.type}) vs Defender: ${defender.name} (${defender.type})`);
+        // console.log(`Attacker stats: level=${attacker.level}, attack=${attacker.attack}`);
+        // console.log(`Defender stats: defense=${defender.defense}`);
 
         // Calculate base damage using standard Pokemon formula
         const baseDamage = Math.max(
@@ -60,8 +60,8 @@ export default class Move {
             defender.type
         );
 
-        console.log(`Type effectiveness multiplier: ${effectivenessInfo.multiplier}`);
-		console.log(`Effectiveness message: ${effectivenessInfo.message}`);
+        // console.log(`Type effectiveness multiplier: ${effectivenessInfo.multiplier}`);
+		// console.log(`Effectiveness message: ${effectivenessInfo.message}`);
         // Apply type effectiveness multiplier
         const finalDamage = Math.max(1, Math.floor(baseDamage * effectivenessInfo.multiplier));
 

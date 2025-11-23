@@ -90,7 +90,6 @@ export default class Pokemon extends GameEntity {
 				}
 			});
 		}
-		console.log(`Loaded moves for ${name}:`, this.moves);
 		this.initializeIndividualValues();
 
 		this.health = 0;

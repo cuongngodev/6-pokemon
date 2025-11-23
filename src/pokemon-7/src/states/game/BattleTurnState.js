@@ -184,23 +184,25 @@ export default class BattleTurnState extends State {
 		/**
 		 * For testing and implementation purposes, assume opponent always faints.
 		*/
-		let opponentFainted = true;
+		// let opponentFainted = true;
 		
-		if(opponentFainted){
-			this.processVictory();
-			return true;
-		}
-		
-		// return false;
-		/** Bring this back to life later 
-		 * */
-		// if (this.playerPokemon.currentHealth <= 0) {
-		// 	this.processDefeat();
-		// 	return true;
-		// } else if (this.opponentPokemon.currentHealth <= 0) {
+		// if(opponentFainted){
 		// 	this.processVictory();
 		// 	return true;
 		// }
+		
+		// return false;
+
+		
+		/** Bring this back to life later 
+		 * */
+		if (this.playerPokemon.currentHealth <= 0) {
+			this.processDefeat();
+			return true;
+		} else if (this.opponentPokemon.currentHealth <= 0) {
+			this.processVictory();
+			return true;
+		}
 		
 	}
 
