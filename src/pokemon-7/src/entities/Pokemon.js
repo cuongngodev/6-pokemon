@@ -34,6 +34,7 @@ export default class Pokemon extends GameEntity {
 
 		this.name = name;
 		this.level = level;
+		this.type = definition.type; 
 		this.position = new Vector();
 		this.battlePosition = new Vector();
 		this.attackPosition = new Vector();
@@ -232,6 +233,44 @@ export default class Pokemon extends GameEntity {
 		// Use the move to deal damage
 		return move.use(this, defender);
 	}
+	/**
+	 * Inflict damage on the defender with type effectiveness.
+	 * @param {Pokemon} defender
+	 * @param {Move} move - The move to use for the attack
+	 * @returns {object} Damage result with effectiveness information
+	 */
+	inflictDamageWithEffectiveness(defender, move = null) {
+		// If no move specified, use the first available move, or fall back to a basic attack
+		if (!move) {
+			if (this.moves.length > 0) {
+				move = this.moves[0];
+			} else {
+				// Fallback to basic attack if no moves available
+				const power = 40;
+				const damage = Math.max(
+					1,
+					Math.floor(
+						(((2 * this.level) / 5 + 2) *
+							power *
+							(this.attack / defender.defense)) /
+							50 +
+							2
+					)
+				);
+				defender.currentHealth = Math.max(0, defender.currentHealth - damage);
+				return {
+					damage: damage,
+					effectiveness: {
+						multiplier: 1.0,
+				
+					}
+				};
+			}
+		}
+
+    // Use the move with type effectiveness
+    return move.useWithEffectiveness(this, defender);
+}
 
 	getHealthMeter() {
 		return `${Math.floor(this.currentHealth)} / ${this.health}`;
@@ -241,5 +280,18 @@ export default class Pokemon extends GameEntity {
 		return `${Math.floor(
 			this.currentExperience - this.levelExperience
 		)} / ${this.targetExperience - this.levelExperience}`;
+	}
+	/**
+	 * Receive damage from an attack.
+	 * @param {number} damage 
+	 */
+	receiveDamage(damage) {
+		if (isNaN(damage) || typeof damage !== 'number') {
+			console.error(`Invalid damage value: ${damage} (type: ${typeof damage})`);
+			
+			return;
+		}
+
+		this.currentHealth = Math.max(0, this.currentHealth - damage);
 	}
 }
