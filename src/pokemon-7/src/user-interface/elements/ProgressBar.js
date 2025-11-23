@@ -11,7 +11,7 @@ export default class ProgressBar extends Panel {
 	};
 
 	/**
-	 * A bar that fills up proportionally to a value.
+	 * A bar that fills up the health or experience as provided proportionally to a value
 	 *
 	 * @param {number} x
 	 * @param {number} y
@@ -24,7 +24,7 @@ export default class ProgressBar extends Panel {
 		super(x, y, width, height);
 		this.pokemon = pokemon;
 		this.type = type;
-		
+        
 		if (this.type === ProgressBar.TYPE.HEALTH) {
 			// Health bar properties
 			this.currentDisplayHealth = pokemon.currentHealth;
@@ -33,9 +33,8 @@ export default class ProgressBar extends Panel {
 			this.targetColor = { r: 0, g: 1, b: 0 };
 			this.updateTargetColor();
 		} else {
-			// Experience bar properties
-			this.currentDisplayExperience = pokemon.currentExperience - pokemon.levelExperience;
-			this.targetDisplayerExperience = pokemon.targetExperience - pokemon.levelExperience;
+            this.currentDisplayExperience = pokemon.currentExperience;
+            this.targetExperience = pokemon.targetExperience;  
 			this.currentColor = { r: 0, g: 0, b: 1 }; // Start with blue
 			this.targetColor = { r: 0, g: 0, b: 1 };
 		}
@@ -122,30 +121,41 @@ export default class ProgressBar extends Panel {
 	 * Updates the target values and starts tween animations for experience
 	 */
 	updateExperience() {
-		// Check if experience has changed
-		if (this.currentDisplayExperience !== this.pokemon.currentExperience) {
+		// Flow:
+		// pokemon current XP -> target XP (currentExperience + gained XP)
+		// no need to tween the Experience bar in the next enter Battle if current XP doesn't change 
+		// tween from currentDisplayExperience to targetExperience
+
+		// Check if Pokemon's current experience has actually changed (gained XP)
+		const pokemonExperienceChanged = this.pokemon.currentExperience !== this.targetExperience;
+		
+		// Only start tween animation if Pokemon's experience has actually changed
+		if (pokemonExperienceChanged) {
+			// Store the new target experience that we need to animate to
+			const newTargetExperience = this.pokemon.currentExperience;
+			
+			// Update our stored target to match Pokemon's current experience
+			this.targetExperience = newTargetExperience;
+			
+			// Play experience gain sound
 			sounds.play(SoundName.ExperienceGain);
 
-			// TWEEN 1: Experience bar width animation (0.6 seconds)
-
+			// Tween from current display experience to the new target experience
 			timer.tween(
 				this,
 				['currentDisplayExperience'],
-				[this.pokemon.currentExperience],
-				0.6 // Slower,
+				[newTargetExperience],
+				0.6
 			);
 			
-			// Experience bars can have color effects for level ups
-				this.currentColor = { r: 1, g: 0.84, b: 0 }; // Blue flash
-				timer.tween(
-					this.currentColor,
-					['r', 'g', 'b'],
-					[0, 0, 1], // Back to blue
-					0.6,
-                   
-				);
-			// }
-            // this.currentDisplayExperience = this.pokemon.currentExperience;
+			// Add visual effect - gold flash that fades back to blue
+			this.currentColor = { r: 1, g: 1, b: 0 }; // Gold flash
+			timer.tween(
+				this.currentColor,
+				['r', 'g', 'b'],
+				[0, 0, 1], // Back to blue
+				0.6
+			);
 		}
 	}
 
